@@ -11,5 +11,7 @@
 #include <malloc.h>
 #include <math3d.h>
 #include <packet.h>
-#include <stdlib.h>
 #include <tamtypes.h>
+
+#include <stdio.h>
+#include <stdlib.h>
