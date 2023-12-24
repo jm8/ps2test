@@ -8,7 +8,14 @@ pub fn build(b: *std.Build) void {
     // what target to build for. Here we do not override the defaults, which
     // means any target is allowed, and the default is native. Other options
     // for restricting supported target set are available.
-    const target = b.standardTargetOptions(.{});
+    const cross_target = std.zig.CrossTarget{
+        .cpu_arch = .mipsel,
+        .os_tag = .freestanding,
+        .cpu_model = .{ .explicit = &std.Target.mips.cpu.mips64r5 },
+    };
+    const target = b.standardTargetOptions(.{
+        .default_target = cross_target,
+    });
 
     // Standard optimization options allow the person running `zig build` to select
     // between Debug, ReleaseSafe, ReleaseFast, and ReleaseSmall. Here we do not
