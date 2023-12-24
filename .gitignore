@@ -4,3 +4,4 @@
 /ps2dev
 zig-out
 zig-cache
+/build

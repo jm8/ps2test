@@ -8,4 +8,4 @@ RUN tar xf zig-linux-x86_64-0.12.0-dev.1849+bb0f7d55e.tar.xz
 ENV PATH="${PATH}:/zig/zig-linux-x86_64-0.12.0-dev.1849+bb0f7d55e"
 
 WORKDIR /mnt
-CMD /mnt/build.sh
+CMD /bin/sh
