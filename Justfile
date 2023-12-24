@@ -4,6 +4,7 @@ docker := "podman"
 pcsx2 := "pcsx2-qt"
 bios := "~/.config/PCSX2/bios/SCPH-70012.bin"
 cp := "cp --no-preserve=all"
+zigflags := "-target mipsel-other-gnu -Iinclude"
 
 default: build
 
@@ -11,12 +12,16 @@ build_image:
     {{docker}} build -q -t {{image_tag}} .
 
 copy_headers: build_image
-    [ -d include ] || {{docker}} run -v$PWD:/mnt {{image_tag}} ./copy_headers.sh
+    {{docker}} run -v$PWD:/mnt {{image_tag}} ./copy_headers.sh
 
-build: copy_headers
+translate_headers: copy_headers
+    zig translate-c {{zigflags}} src/headers.h > src/headers.zig
+
+build:
+    [ -e src/headers.zig ] || just translate_headers
     mkdir -p build
     {{cp}} "{{zig_lib_dir}}/zig.h" build
-    zig build-exe -target mipsel-other-gnu -ofmt=c -Iinclude src/main.zig -femit-bin=build/main.c
+    zig build-exe {{zigflags}} -ofmt=c -femit-bin=build/main.c src/main.zig
     {{docker}} run -v$PWD:/mnt {{image_tag}} ./build.sh
 
 run:
