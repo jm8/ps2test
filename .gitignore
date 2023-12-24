@@ -2,3 +2,5 @@
 *.elf
 *.o
 /ps2dev
+zig-out
+zig-cache

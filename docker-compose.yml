@@ -2,6 +2,8 @@ version: "3.8"
 services:
   build:
     build: .
+    entrypoint: /bin/sh
+    network_mode: host
     volumes:
       - type: bind
         source: .
