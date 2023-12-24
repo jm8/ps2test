@@ -9,25 +9,22 @@
 #
 */
 
+#include <dma.h>
+#include <dma_tags.h>
+#include <draw.h>
+#include <draw3d.h>
+#include <gif_tags.h>
+#include <graph.h>
+#include <gs_psm.h>
 #include <kernel.h>
 #include <malloc.h>
 #include <math3d.h>
+#include <packet.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <tamtypes.h>
 
-#include <packet.h>
-
-#include <dma_tags.h>
-#include <gif_tags.h>
-#include <gs_psm.h>
-
-#include <dma.h>
-
-#include <graph.h>
-
-#include <draw.h>
-#include <draw3d.h>
-
+#include "input.h"
 #include "mesh_data.c"
 
 VECTOR object_position = {0.00f, 0.00f, 0.00f, 1.00f};
@@ -142,6 +139,8 @@ int render(framebuffer_t *frame, zbuffer_t *z) {
 
   // The main loop...
   while (1) {
+    input_update();
+
     qword_t *q;
 
     current = packets[context];
@@ -224,6 +223,7 @@ int render(framebuffer_t *frame, zbuffer_t *z) {
 }
 
 int main(int argc, char *argv[]) {
+  printf("Hello, world!\n");
 
   // The buffers to be used.
   framebuffer_t frame;
@@ -238,6 +238,8 @@ int main(int argc, char *argv[]) {
 
   // Init the drawing environment and framebuffer.
   init_drawing_environment(&frame, &z);
+
+  input_init();
 
   // Render the cube
   render(&frame, &z);

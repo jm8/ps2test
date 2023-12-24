@@ -7,8 +7,8 @@
 # Review ps2sdk README & LICENSE files for further details.
 
 EE_BIN = cube.elf
-EE_OBJS = src/cube.o
-EE_LIBS = -ldraw -lgraph -lmath3d -lpacket -ldma
+EE_OBJS = src/cube.o src/input.o
+EE_LIBS = -ldraw -lgraph -lmath3d -lpacket -ldma -lpad
 
 all: $(EE_BIN)
 	$(EE_STRIP) --strip-all $(EE_BIN)
