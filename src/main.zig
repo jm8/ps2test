@@ -1,6 +1,57 @@
+const std = @import("std");
 const c = @import("headers.zig");
+const allocator = @import("allocator.zig").allocator;
 
-///
+// pub const os = struct {
+//     pub const system = struct {
+//         pub const fd_t = i32;
+//         pub const STDOUT_FILENO = 0;
+//         pub const STDERR_FILENO = 1;
+//         pub const E = std.os.linux.E;
+//         pub const PROT = std.os.linux.PROT;
+//         pub const MAP = std.os.linux.MAP;
+//         pub const MSF = std.os.linux.MSF;
+//         pub const dl_phdr_info = std.os.linux.dl_phdr_info;
+//         pub const abort = c.abort;
+
+//         pub fn getErrno(T: usize) E {
+//             _ = T;
+//             return .SUCCESS;
+//         }
+
+//         pub fn write(f: fd_t, ptr: [*]const u8, len: usize) usize {
+//             _ = ptr;
+//             _ = f;
+//             return len;
+//         }
+
+//         pub fn mmap(address: [*]const u8, length: usize, flags: i32) usize {
+//             _ = flags;
+//             _ = length;
+//             _ = address;
+//             return 1;
+//         }
+
+//         pub fn munmap(address: [*]const u8, length: usize) usize {
+//             _ = length;
+//             _ = address;
+//             return 1;
+//         }
+
+//         pub fn msync(address: [*]const u8, length: usize, flags: i32) usize {
+//             _ = flags;
+//             _ = length;
+//             _ = address;
+//             return 1;
+//         }
+
+//         pub fn isatty(_: i32) i32 {
+//             return 0;
+//         }
+//     };
+// };
+
+/// How to store pixels in the frame buffer
 const PixelStorageMethod = enum(i32) {
     /// 32 bits per pixel.
     PSM_32 = c.GS_PSM_32,
@@ -60,11 +111,11 @@ const Canvas = struct {
     psm: PixelStorageMethod,
     zsm: ZStorageMethod,
     frame_buffer: i32,
+    z_buffer: i32,
 
     fn init(options: CanvasCreateOptions) Canvas {
         const frame_buffer = c.graph_vram_allocate(options.width, options.height, @intFromEnum(options.psm), c.GRAPH_ALIGN_PAGE);
         const z_buffer = c.graph_vram_allocate(options.width, options.height, @intFromEnum(options.zsm), c.GRAPH_ALIGN_PAGE);
-        _ = z_buffer;
 
         // graph_initialize always returns 0.
         _ = c.graph_initialize(frame_buffer, options.width, options.height, @intFromEnum(options.psm), 0, 0);
@@ -76,9 +127,24 @@ const Canvas = struct {
             .psm = options.psm,
             .zsm = options.zsm,
             .frame_buffer = frame_buffer,
+            .z_buffer = z_buffer,
         };
     }
 };
+
+// const Packet = struct {
+//     data: []u128,
+//     buffer: []u128,
+
+//     /// Initialize a packet with a capacity of `capacity` qwords.
+//     fn init(capcity: u32) Packet {
+//         const start = c.memalign(64, capcity * 16);
+//         return Packet{
+//             .buffer = start[0..capcity],
+
+//         };
+//     }
+// };
 
 fn game() !void {
     const canvas = Canvas.init(.{
@@ -86,9 +152,16 @@ fn game() !void {
         .height = 512,
     });
     _ = canvas;
+
+    var array_list = std.ArrayList(Qword).init(allocator);
+    try array_list.append(Qword{ .qw = 1 });
+
+    _ = c.printf("Length of array list: %d\n", array_list.items.len);
 }
 
-export fn main() c_int {
+const Qword = c.qword_t;
+
+export fn main() i32 {
     game() catch {};
 
     _ = c.SleepThread();

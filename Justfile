@@ -4,7 +4,8 @@ docker := "podman"
 pcsx2 := "pcsx2-qt"
 bios := "~/.config/PCSX2/bios/SCPH-70012.bin"
 cp := "cp --no-preserve=all"
-zigflags := "-target mipsel-other-gnu -Iinclude"
+# in ReleaseFast mode currently because if i'm in Debug mode it won't compile asserts because of printing
+zigflags := "-target mipsel-other-gnu -Iinclude -fsingle-threaded -O ReleaseFast"
 
 default: build
 
@@ -17,7 +18,7 @@ copy_headers: build_image
 translate_headers: copy_headers
     zig translate-c {{zigflags}} src/headers.h > src/headers.zig
 
-build:
+build: translate_headers
     [ -e src/headers.zig ] || just translate_headers
     mkdir -p build
     {{cp}} "{{zig_lib_dir}}/zig.h" build
@@ -28,4 +29,5 @@ run:
     {{pcsx2}} {{bios}} -elf $PWD/build/main.elf
 
 clean:
+    rm -f src/headers.zig
     rm -rf build
