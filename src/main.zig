@@ -124,14 +124,19 @@ fn game() !void {
     });
     _ = canvas;
 
-    std.debug.print("My favorite number is {}\n", .{10});
+    std.debug.print("About to panic\n", .{});
+    std.debug.assert(false);
+    std.debug.print("Done panicing\n", .{});
+    return anyerror.Unknown;
 }
 
 const Qword = c.qword_t;
 
 export fn main() i32 {
     game() catch |err| {
-        // std.debug.dumpStackTrace(@errorReturnTrace(err));
+        if (@errorReturnTrace()) |trace| {
+            std.debug.dumpStackTrace(trace);
+        }
         std.io.getStdErr().writeAll(@errorName(err)) catch {};
     };
 
