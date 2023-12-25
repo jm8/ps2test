@@ -2,54 +2,25 @@ const std = @import("std");
 const c = @import("headers.zig");
 const allocator = @import("allocator.zig").allocator;
 
-// pub const os = struct {
-//     pub const system = struct {
-//         pub const fd_t = i32;
-//         pub const STDOUT_FILENO = 0;
-//         pub const STDERR_FILENO = 1;
-//         pub const E = std.os.linux.E;
-//         pub const PROT = std.os.linux.PROT;
-//         pub const MAP = std.os.linux.MAP;
-//         pub const MSF = std.os.linux.MSF;
-//         pub const dl_phdr_info = std.os.linux.dl_phdr_info;
-//         pub const abort = c.abort;
+extern fn write(fd: i32, buf: [*]const u8, n: u32) i32;
+const _write = write;
 
-//         pub fn getErrno(T: usize) E {
-//             _ = T;
-//             return .SUCCESS;
-//         }
+pub const os = struct {
+    pub const system = struct {
+        pub const fd_t = i32;
+        pub const STDOUT_FILENO = 1;
+        /// Redirect stderr to stdout, since the ps2sdk only gives us stderr
+        pub const STDERR_FILENO = 1;
+        /// Should return a "negative" value between "-4096" and "-1" in case of error, otherwise the number of bytes writen
+        pub fn write(fd: i32, buf: [*]const u8, n: u32) u32 {
+            return @bitCast(_write(fd, buf, n));
+        }
 
-//         pub fn write(f: fd_t, ptr: [*]const u8, len: usize) usize {
-//             _ = ptr;
-//             _ = f;
-//             return len;
-//         }
-
-//         pub fn mmap(address: [*]const u8, length: usize, flags: i32) usize {
-//             _ = flags;
-//             _ = length;
-//             _ = address;
-//             return 1;
-//         }
-
-//         pub fn munmap(address: [*]const u8, length: usize) usize {
-//             _ = length;
-//             _ = address;
-//             return 1;
-//         }
-
-//         pub fn msync(address: [*]const u8, length: usize, flags: i32) usize {
-//             _ = flags;
-//             _ = length;
-//             _ = address;
-//             return 1;
-//         }
-
-//         pub fn isatty(_: i32) i32 {
-//             return 0;
-//         }
-//     };
-// };
+        pub const E = std.os.linux.E;
+        /// Checks if the number is "negative" and more than "-4096", flips it and converts it to the error enum
+        pub const getErrno = std.os.linux.getErrno;
+    };
+};
 
 /// How to store pixels in the frame buffer
 const PixelStorageMethod = enum(i32) {
@@ -153,16 +124,16 @@ fn game() !void {
     });
     _ = canvas;
 
-    var array_list = std.ArrayList(Qword).init(allocator);
-    try array_list.append(Qword{ .qw = 1 });
-
-    _ = c.printf("Length of array list: %d\n", array_list.items.len);
+    std.debug.print("My favorite number is {}\n", .{10});
 }
 
 const Qword = c.qword_t;
 
 export fn main() i32 {
-    game() catch {};
+    game() catch |err| {
+        // std.debug.dumpStackTrace(@errorReturnTrace(err));
+        std.io.getStdErr().writeAll(@errorName(err)) catch {};
+    };
 
     _ = c.SleepThread();
     return 0;
