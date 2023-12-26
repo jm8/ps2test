@@ -122,22 +122,15 @@ fn game() !void {
         .width = 640,
         .height = 512,
     });
-    _ = canvas;
 
-    std.debug.print("About to panic\n", .{});
-    std.debug.assert(false);
-    std.debug.print("Done panicing\n", .{});
-    return anyerror.Unknown;
+    _ = canvas;
 }
 
 const Qword = c.qword_t;
 
 export fn main() i32 {
     game() catch |err| {
-        if (@errorReturnTrace()) |trace| {
-            std.debug.dumpStackTrace(trace);
-        }
-        std.io.getStdErr().writeAll(@errorName(err)) catch {};
+        std.debug.print("Error: {s}\n", .{@errorName(err)});
     };
 
     _ = c.SleepThread();

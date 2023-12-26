@@ -4,7 +4,7 @@ docker := "podman"
 pcsx2 := "pcsx2-qt"
 bios := "~/.config/PCSX2/bios/SCPH-70012.bin"
 cp := "cp --no-preserve=all"
-zigflags := "-target mipsel-freestanding-gnu -Iinclude -fsingle-threaded"
+zigflags := "-target mipsel-freestanding-gnu -Iinclude -fsingle-threaded -O Debug"
 
 default: build
 
