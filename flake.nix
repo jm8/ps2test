@@ -25,6 +25,7 @@
               zig
               zls
               jq
+              ps2client
             ];
           };
         }

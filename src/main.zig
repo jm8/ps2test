@@ -126,13 +126,17 @@ fn game() !void {
     _ = canvas;
 }
 
-const Qword = c.qword_t;
+// const Qword = c.qword_t;
 
 export fn main() i32 {
     game() catch |err| {
         std.debug.print("Error: {s}\n", .{@errorName(err)});
     };
 
-    _ = c.SleepThread();
+    while (true) {
+        _ = c.printf("Hello, world!\n");
+    }
+
+    // _ = c.SleepThread();
     return 0;
 }
