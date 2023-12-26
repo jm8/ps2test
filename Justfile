@@ -25,7 +25,8 @@ translate_headers: copy_headers
 
 build: translate_headers
     mkdir -p build
-    cp "{{zig_lib_dir}}/zig.h" build
+    cp --no-preserve=all "{{zig_lib_dir}}/zig.h" build
+    zig build-exe {{zigflags}} -ofmt=c -femit-bin=build/main.c src/main.zig
     {{dockerrun}} ./build.sh
 
 emulate:
