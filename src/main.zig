@@ -1,4 +1,27 @@
 const c = @import("headers.zig");
+const game = @import("game.zig");
+const std = @import("std");
+
+extern fn write(fd: i32, buf: [*]const u8, n: u32) i32;
+const _write = write;
+
+pub const os = struct {
+    pub const system = struct {
+        pub const fd_t = i32;
+        pub const STDOUT_FILENO = 1;
+        /// Redirect stderr to stdout, since the ps2sdk only gives us stderr
+        pub const STDERR_FILENO = 1;
+        /// Should return a "negative" value between "-4096" and "-1" in case of error, otherwise the number of bytes writen
+        pub fn write(fd: i32, buf: [*]const u8, n: u32) u32 {
+            return @bitCast(_write(fd, buf, n));
+        }
+
+        pub const E = std.os.linux.E;
+        /// Checks if the number is "negative" and more than "-4096", flips it and converts it to the error enum
+        pub const getErrno = std.os.linux.getErrno;
+    };
+};
+
 pub export var points_count: c_int = 36;
 pub export var points: [36]c_int = [36]c_int{
     0,
@@ -382,10 +405,14 @@ pub export fn init_drawing_environment(arg_frame: [*c]c.framebuffer_t, arg_z: [*
     c.dma_wait_fast();
     c.packet_free(packet);
 }
+
+const Draw = struct {};
+
 pub export fn render(arg_frame: [*c]c.framebuffer_t, arg_z: [*c]c.zbuffer_t) c_int {
     var frame = arg_frame;
     var z = arg_z;
     var i: c_int = undefined;
+    _ = i;
     var context: c_int = 0;
     var local_world: c.MATRIX = undefined;
     var world_view: c.MATRIX = undefined;
@@ -419,7 +446,11 @@ pub export fn render(arg_frame: [*c]c.framebuffer_t, arg_z: [*c]c.zbuffer_t) c_i
     color.unnamed_0.q = 1.0;
     c.create_view_screen(@as([*c]f32, @ptrCast(@alignCast(&view_screen))), c.graph_aspect_ratio(), -3.0, 3.0, -3.0, 3.0, 1.0, 2000.0);
     c.dma_wait_fast();
+    var t: i32 = 0;
     while (true) {
+        std.debug.print("Hello from std.debug.print!\n", .{});
+
+        t += 1;
         var q: [*c]c.qword_t = undefined;
         current = packets[@as(c_uint, @intCast(context))];
         object_rotation[@as(c_uint, @intCast(@as(c_int, 0)))] += 0.00800000037997961;
@@ -434,24 +465,9 @@ pub export fn render(arg_frame: [*c]c.framebuffer_t, arg_z: [*c]c.zbuffer_t) c_i
         q = dmatag;
         q += 1;
         q = c.draw_disable_tests(q, @as(c_int, 0), z);
-        q = c.draw_clear(q, @as(c_int, 0), 2048.0 - 320.0, 2048.0 - 256.0, @as(f32, @floatFromInt(frame.*.width)), @as(f32, @floatFromInt(frame.*.height)), @as(c_int, 0), @as(c_int, 0), @as(c_int, 0));
+        q = c.draw_clear(q, @as(c_int, 0), 2048.0 - 320.0, 2048.0 - 256.0, @as(f32, @floatFromInt(frame.*.width)), @as(f32, @floatFromInt(frame.*.height)), @as(c_int, @mod(t, 256)), @as(c_int, 0), @as(c_int, 0));
         q = c.draw_enable_tests(q, @as(c_int, 0), z);
-        q = c.draw_prim_start(q, @as(c_int, 0), &prim, &color);
-        {
-            i = 0;
-            while (i < points_count) : (i += 1) {
-                q.*.dw[@as(c_uint, @intCast(@as(c_int, 0)))] = (blk: {
-                    const tmp = points[@as(c_uint, @intCast(i))];
-                    if (tmp >= 0) break :blk colors + @as(usize, @intCast(tmp)) else break :blk colors - ~@as(usize, @bitCast(@as(isize, @intCast(tmp)) +% -1));
-                }).*.rgbaq;
-                q.*.dw[@as(c_uint, @intCast(@as(c_int, 1)))] = (blk: {
-                    const tmp = points[@as(c_uint, @intCast(i))];
-                    if (tmp >= 0) break :blk verts + @as(usize, @intCast(tmp)) else break :blk verts - ~@as(usize, @bitCast(@as(isize, @intCast(tmp)) +% -1));
-                }).*.xyz;
-                q += 1;
-            }
-        }
-        q = c.draw_prim_end(q, @as(c_int, 2), (@as(u64, @bitCast(@as(c_longlong, @as(c_int, 1)))) << @intCast(0)) | (@as(u64, @bitCast(@as(c_longlong, @as(c_int, 5)))) << @intCast(4)));
+
         q = c.draw_finish(q);
         _ = blk: {
             _ = blk_1: {
@@ -478,11 +494,8 @@ pub export fn render(arg_frame: [*c]c.framebuffer_t, arg_z: [*c]c.zbuffer_t) c_i
     c.packet_free(packets[@as(c_uint, @intCast(@as(c_int, 1)))]);
     return 0;
 }
-pub export fn main(arg_argc: c_int, arg_argv: [*c][*c]u8) c_int {
-    var argc = arg_argc;
-    _ = @TypeOf(argc);
-    var argv = arg_argv;
-    _ = @TypeOf(argv);
+
+fn run() !void {
     var frame: c.framebuffer_t = undefined;
     var z: c.zbuffer_t = undefined;
     _ = c.dma_channel_initialize(@as(c_int, 2), @as(?*anyopaque, @ptrFromInt(@as(c_int, 0))), @as(c_int, 0));
@@ -490,6 +503,12 @@ pub export fn main(arg_argc: c_int, arg_argv: [*c][*c]u8) c_int {
     init_gs(&frame, &z);
     init_drawing_environment(&frame, &z);
     _ = render(&frame, &z);
+}
+
+pub export fn main() c_int {
+    run() catch |err| {
+        _ = err;
+    };
     _ = c.SleepThread();
     return 0;
 }

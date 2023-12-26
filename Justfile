@@ -7,7 +7,7 @@ zigflags := "-target mipsel-freestanding-gnu -Iinclude -lc -fsingle-threaded -O 
 dockerrun := docker + " run --net=host -v$PWD:/mnt -it " + image_tag
 # ps2client:= dockerrun + " ps2client -h 192.168.0.10"
 ps2client:= "ps2client -h 192.168.0.10"
-
+interface:="enp0s13f0u4"
 
 default: build
 
@@ -41,6 +41,9 @@ ps2run: build_image
 
 ps2poweroff: build_image
     {{ps2client}} poweroff
+
+ps2logs:
+    sudo tcpdump -n -i {{interface}} -A udp port 18194
 
 clean:
     rm -f src/headers.zig
