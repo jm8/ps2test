@@ -4,7 +4,7 @@ docker := "podman"
 pcsx2 := "pcsx2-qt"
 bios := "~/.config/PCSX2/bios/SCPH-70012.bin"
 cp := "cp --no-preserve=all"
-zigflags := "-target mipsel-freestanding-gnu -Iinclude -fsingle-threaded -O Debug"
+zigflags := "-target mipsel-freestanding-gnu -Iinclude -lc -fsingle-threaded -O Debug"
 dockerrun := docker + " run --net=host -v$PWD:/mnt -it " + image_tag
 # ps2client:= dockerrun + " ps2client -h 192.168.0.10"
 ps2client:= "ps2client -h 192.168.0.10"
