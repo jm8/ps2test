@@ -2,7 +2,7 @@ const c = @import("headers.zig");
 const game = @import("game.zig");
 const std = @import("std");
 const allocator = @import("allocator.zig").memalign_allocator;
-const Pad = @import("pad.zig").Pad;
+const input = @import("input.zig");
 
 extern fn write(fd: i32, buf: [*]const u8, n: u32) i32;
 const _write = write;
@@ -410,16 +410,19 @@ pub export fn init_drawing_environment(arg_frame: [*c]c.framebuffer_t, arg_z: [*
 
 const Draw = struct {};
 
-pub fn render(arg_frame: [*c]c.framebuffer_t, arg_z: [*c]c.zbuffer_t, pad: *Pad) !void {
+pub fn render(arg_frame: [*c]c.framebuffer_t, arg_z: [*c]c.zbuffer_t) !void {
     var frame = arg_frame;
     var z = arg_z;
     var i: c_int = undefined;
     _ = i;
     var context: c_int = 0;
     var local_world: c.MATRIX = undefined;
+    _ = local_world;
     var world_view: c.MATRIX = undefined;
+    _ = world_view;
     var view_screen: c.MATRIX = undefined;
     var local_screen: c.MATRIX = undefined;
+    _ = local_screen;
     var temp_vertices: [*c]c.VECTOR = undefined;
     var prim: c.prim_t = undefined;
     var color: c.color_t = undefined;
@@ -450,26 +453,27 @@ pub fn render(arg_frame: [*c]c.framebuffer_t, arg_z: [*c]c.zbuffer_t, pad: *Pad)
     c.dma_wait_fast();
     var t: i32 = 0;
     while (true) {
-        pad.update() catch |err| {
-            std.debug.print("Error: {s}\n", .{@errorName(err)});
-        };
-
+        input.update();
         t += 1;
         var q: [*c]c.qword_t = undefined;
         current = packets[@as(c_uint, @intCast(context))];
-        object_rotation[@as(c_uint, @intCast(@as(c_int, 0)))] += 0.00800000037997961;
-        object_rotation[@as(c_uint, @intCast(@as(c_int, 1)))] += 0.012000000104308128;
-        c.create_local_world(@as([*c]f32, @ptrCast(@alignCast(&local_world))), @as([*c]f32, @ptrCast(@alignCast(&object_position))), @as([*c]f32, @ptrCast(@alignCast(&object_rotation))));
-        c.create_world_view(@as([*c]f32, @ptrCast(@alignCast(&world_view))), @as([*c]f32, @ptrCast(@alignCast(&camera_position))), @as([*c]f32, @ptrCast(@alignCast(&camera_rotation))));
-        c.create_local_screen(@as([*c]f32, @ptrCast(@alignCast(&local_screen))), @as([*c]f32, @ptrCast(@alignCast(&local_world))), @as([*c]f32, @ptrCast(@alignCast(&world_view))), @as([*c]f32, @ptrCast(@alignCast(&view_screen))));
-        c.calculate_vertices(temp_vertices, vertex_count, @as([*c]c.VECTOR, @ptrCast(@alignCast(&vertices))), @as([*c]f32, @ptrCast(@alignCast(&local_screen))));
-        _ = c.draw_convert_xyz(verts, @as(f32, @floatFromInt(@as(c_int, 2048))), @as(f32, @floatFromInt(@as(c_int, 2048))), @as(c_int, 32), vertex_count, @as([*c]c.vertex_f_t, @ptrCast(@alignCast(temp_vertices))));
-        _ = c.draw_convert_rgbq(colors, vertex_count, @as([*c]c.vertex_f_t, @ptrCast(@alignCast(temp_vertices))), @as([*c]c.color_f_t, @ptrCast(@alignCast(@as([*c]c.VECTOR, @ptrCast(@alignCast(&colours)))))), @as(u8, @bitCast(@as(i8, @truncate(@as(c_int, 128))))));
         dmatag = current.*.data;
         q = dmatag;
         q += 1;
         q = c.draw_disable_tests(q, @as(c_int, 0), z);
-        q = c.draw_clear(q, @as(c_int, 0), 2048.0 - 320.0, 2048.0 - 256.0, @as(f32, @floatFromInt(frame.*.width)), @as(f32, @floatFromInt(frame.*.height)), @as(c_int, @mod(t, 256)), @as(c_int, 0), @as(c_int, 0));
+
+        var r: i32 = undefined;
+        var g: i32 = undefined;
+        const b: i32 = 0;
+        if (input.isPressed(0, .Cross)) {
+            r = 255;
+            g = 0;
+        } else {
+            r = 0;
+            g = 255;
+        }
+
+        q = c.draw_clear(q, @as(c_int, 0), 2048.0 - 320.0, 2048.0 - 256.0, @as(f32, @floatFromInt(frame.*.width)), @as(f32, @floatFromInt(frame.*.height)), r, g, b);
         q = c.draw_enable_tests(q, @as(c_int, 0), z);
 
         q = c.draw_finish(q);
@@ -509,20 +513,9 @@ fn run() !void {
     init_gs(&frame, &z);
     init_drawing_environment(&frame, &z);
 
-    // pad initialization
-    if (c.SifLoadModule("rom0:SIO2MAN", 0, 0) == 0) {
-        return error.PadInitError;
-    }
-    if (c.SifLoadModule("rom0:PADMAN", 0, 0) == 0) {
-        return error.PadInitError;
-    }
-    if (c.padInit(0) == 0) {
-        return error.PadInitError;
-    }
+    try input.init(allocator);
 
-    var pad = try Pad.init(allocator, 0, 0);
-
-    try render(&frame, &z, &pad);
+    try render(&frame, &z);
 }
 
 pub export fn main() c_int {
