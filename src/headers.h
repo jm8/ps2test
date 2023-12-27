@@ -8,6 +8,8 @@
 #include <graph.h>
 #include <gs_psm.h>
 #include <kernel.h>
+#include <libpad.h>
+#include <loadfile.h>
 #include <malloc.h>
 #include <math3d.h>
 #include <packet.h>

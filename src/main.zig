@@ -1,6 +1,8 @@
 const c = @import("headers.zig");
 const game = @import("game.zig");
 const std = @import("std");
+const allocator = @import("allocator.zig").memalign_allocator;
+const Pad = @import("pad.zig").Pad;
 
 extern fn write(fd: i32, buf: [*]const u8, n: u32) i32;
 const _write = write;
@@ -408,7 +410,7 @@ pub export fn init_drawing_environment(arg_frame: [*c]c.framebuffer_t, arg_z: [*
 
 const Draw = struct {};
 
-pub export fn render(arg_frame: [*c]c.framebuffer_t, arg_z: [*c]c.zbuffer_t) c_int {
+pub fn render(arg_frame: [*c]c.framebuffer_t, arg_z: [*c]c.zbuffer_t, pad: *Pad) !void {
     var frame = arg_frame;
     var z = arg_z;
     var i: c_int = undefined;
@@ -448,7 +450,9 @@ pub export fn render(arg_frame: [*c]c.framebuffer_t, arg_z: [*c]c.zbuffer_t) c_i
     c.dma_wait_fast();
     var t: i32 = 0;
     while (true) {
-        std.debug.print("Hello from std.debug.print!\n", .{});
+        pad.update() catch |err| {
+            std.debug.print("Error: {s}\n", .{@errorName(err)});
+        };
 
         t += 1;
         var q: [*c]c.qword_t = undefined;
@@ -469,6 +473,7 @@ pub export fn render(arg_frame: [*c]c.framebuffer_t, arg_z: [*c]c.zbuffer_t) c_i
         q = c.draw_enable_tests(q, @as(c_int, 0), z);
 
         q = c.draw_finish(q);
+
         _ = blk: {
             _ = blk_1: {
                 dmatag.*.dw[@as(c_uint, @intCast(@as(c_int, 0)))] = (((((@as(u64, @bitCast(@as(c_longlong, (@divExact(@as(c_int, @bitCast(@intFromPtr(q) -% @intFromPtr(current.*.data))), @sizeOf(c.qword_t)) - @as(c_int, 1)) & @as(c_int, 65535)))) << @intCast(0)) | (@as(u64, @bitCast(@as(c_longlong, @as(c_int, 0) & @as(c_int, 3)))) << @intCast(26))) | (@as(u64, @bitCast(@as(c_longlong, @as(c_int, 7) & @as(c_int, 7)))) << @intCast(28))) | (@as(u64, @bitCast(@as(c_longlong, @as(c_int, 0) & @as(c_int, 1)))) << @intCast(31))) | (@as(u64, @bitCast(@as(c_longlong, @as(c_int, 0) & @as(c_int, 2147483647)))) << @intCast(32))) | (@as(u64, @bitCast(@as(c_longlong, @as(c_int, 0) & @as(c_int, 1)))) << @intCast(63));
@@ -492,22 +497,37 @@ pub export fn render(arg_frame: [*c]c.framebuffer_t, arg_z: [*c]c.zbuffer_t) c_i
     }
     c.packet_free(packets[@as(c_uint, @intCast(@as(c_int, 0)))]);
     c.packet_free(packets[@as(c_uint, @intCast(@as(c_int, 1)))]);
-    return 0;
 }
 
 fn run() !void {
+    // graphics initialization
+
     var frame: c.framebuffer_t = undefined;
     var z: c.zbuffer_t = undefined;
-    _ = c.dma_channel_initialize(@as(c_int, 2), @as(?*anyopaque, @ptrFromInt(@as(c_int, 0))), @as(c_int, 0));
-    c.dma_channel_fast_waits(@as(c_int, 2));
+    _ = c.dma_channel_initialize(c.DMA_CHANNEL_GIF, @as(?*anyopaque, @ptrFromInt(@as(c_int, 0))), @as(c_int, 0));
+    c.dma_channel_fast_waits(c.DMA_CHANNEL_GIF);
     init_gs(&frame, &z);
     init_drawing_environment(&frame, &z);
-    _ = render(&frame, &z);
+
+    // pad initialization
+    if (c.SifLoadModule("rom0:SIO2MAN", 0, 0) == 0) {
+        return error.PadInitError;
+    }
+    if (c.SifLoadModule("rom0:PADMAN", 0, 0) == 0) {
+        return error.PadInitError;
+    }
+    if (c.padInit(0) == 0) {
+        return error.PadInitError;
+    }
+
+    var pad = try Pad.init(allocator, 0, 0);
+
+    try render(&frame, &z, &pad);
 }
 
 pub export fn main() c_int {
     run() catch |err| {
-        _ = err;
+        std.debug.print("Error: {s}\n", .{@errorName(err)});
     };
     _ = c.SleepThread();
     return 0;
