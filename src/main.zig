@@ -24,362 +24,6 @@ pub const os = struct {
     };
 };
 
-pub export var points_count: c_int = 36;
-pub export var points: [36]c_int = [36]c_int{
-    0,
-    1,
-    2,
-    1,
-    2,
-    3,
-    4,
-    5,
-    6,
-    5,
-    6,
-    7,
-    8,
-    9,
-    10,
-    9,
-    10,
-    11,
-    12,
-    13,
-    14,
-    13,
-    14,
-    15,
-    16,
-    17,
-    18,
-    17,
-    18,
-    19,
-    20,
-    21,
-    22,
-    21,
-    22,
-    23,
-};
-pub export var vertex_count: c_int = 24;
-pub export var vertices: [24]c.VECTOR = [24]c.VECTOR{
-    [4]f32{
-        10.0,
-        10.0,
-        10.0,
-        1.0,
-    },
-    [4]f32{
-        10.0,
-        10.0,
-        -10.0,
-        1.0,
-    },
-    [4]f32{
-        10.0,
-        -10.0,
-        10.0,
-        1.0,
-    },
-    [4]f32{
-        10.0,
-        -10.0,
-        -10.0,
-        1.0,
-    },
-    [4]f32{
-        -10.0,
-        10.0,
-        10.0,
-        1.0,
-    },
-    [4]f32{
-        -10.0,
-        10.0,
-        -10.0,
-        1.0,
-    },
-    [4]f32{
-        -10.0,
-        -10.0,
-        10.0,
-        1.0,
-    },
-    [4]f32{
-        -10.0,
-        -10.0,
-        -10.0,
-        1.0,
-    },
-    [4]f32{
-        -10.0,
-        10.0,
-        10.0,
-        1.0,
-    },
-    [4]f32{
-        10.0,
-        10.0,
-        10.0,
-        1.0,
-    },
-    [4]f32{
-        -10.0,
-        10.0,
-        -10.0,
-        1.0,
-    },
-    [4]f32{
-        10.0,
-        10.0,
-        -10.0,
-        1.0,
-    },
-    [4]f32{
-        -10.0,
-        -10.0,
-        10.0,
-        1.0,
-    },
-    [4]f32{
-        10.0,
-        -10.0,
-        10.0,
-        1.0,
-    },
-    [4]f32{
-        -10.0,
-        -10.0,
-        -10.0,
-        1.0,
-    },
-    [4]f32{
-        10.0,
-        -10.0,
-        -10.0,
-        1.0,
-    },
-    [4]f32{
-        -10.0,
-        10.0,
-        10.0,
-        1.0,
-    },
-    [4]f32{
-        10.0,
-        10.0,
-        10.0,
-        1.0,
-    },
-    [4]f32{
-        -10.0,
-        -10.0,
-        10.0,
-        1.0,
-    },
-    [4]f32{
-        10.0,
-        -10.0,
-        10.0,
-        1.0,
-    },
-    [4]f32{
-        -10.0,
-        10.0,
-        -10.0,
-        1.0,
-    },
-    [4]f32{
-        10.0,
-        10.0,
-        -10.0,
-        1.0,
-    },
-    [4]f32{
-        -10.0,
-        -10.0,
-        -10.0,
-        1.0,
-    },
-    [4]f32{
-        10.0,
-        -10.0,
-        -10.0,
-        1.0,
-    },
-};
-pub export var colours: [24]c.VECTOR = [24]c.VECTOR{
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-    [4]f32{
-        1.0,
-        1.0,
-        1.0,
-        1.0,
-    },
-};
-pub export var object_position: c.VECTOR = [4]f32{
-    0.0,
-    0.0,
-    0.0,
-    1.0,
-};
-pub export var object_rotation: c.VECTOR = [4]f32{
-    0.0,
-    0.0,
-    0.0,
-    1.0,
-};
-pub export var camera_position: c.VECTOR = [4]f32{
-    0.0,
-    0.0,
-    100.0,
-    1.0,
-};
-pub export var camera_rotation: c.VECTOR = [4]f32{
-    0.0,
-    0.0,
-    0.0,
-    1.0,
-};
 pub export fn init_gs(arg_frame: [*c]c.framebuffer_t, arg_z: [*c]c.zbuffer_t) void {
     var frame = arg_frame;
     var z = arg_z;
@@ -408,104 +52,141 @@ pub export fn init_drawing_environment(arg_frame: [*c]c.framebuffer_t, arg_z: [*
     c.packet_free(packet);
 }
 
-const Draw = struct {};
+const RegisterDescriptor = enum(u4) {
+    PRIM = 0x0,
+    RGBAQ = 0x1,
+    ST = 0x2,
+    UV = 0x3,
+    XYZF2 = 0x4,
+    XYZ2 = 0x5,
+    TEX0_1 = 0x6,
+    TEX0_2 = 0x7,
+    CLAMP_1 = 0x8,
+    CLAMP_2 = 0x9,
+    FOG = 0xa,
+    // _ = 0xb,
+    XYZF3 = 0xc,
+    XYZ3 = 0xd,
+    A = 0xe,
+    NOP = 0xf,
+};
+
+const GifTagOptions = struct {
+    prim: ?u11,
+    registers: []const RegisterDescriptor,
+    nloop: u15,
+    end_of_packet: bool,
+    data_format: GifTagDataFormat,
+};
+
+const GifTagDataFormat = enum(u2) {
+    PACKED = 0b00,
+    REGLIST = 0b01,
+    IMAGE = 0b10,
+    DISABLE = 0b11,
+};
+
+const GifTag = packed struct(u128) {
+    const RegisterDescriptors = packed struct(u64) {
+        reg0: RegisterDescriptor = @enumFromInt(0),
+        reg1: RegisterDescriptor = @enumFromInt(0),
+        reg2: RegisterDescriptor = @enumFromInt(0),
+        reg3: RegisterDescriptor = @enumFromInt(0),
+        reg4: RegisterDescriptor = @enumFromInt(0),
+        reg5: RegisterDescriptor = @enumFromInt(0),
+        reg6: RegisterDescriptor = @enumFromInt(0),
+        reg7: RegisterDescriptor = @enumFromInt(0),
+        reg8: RegisterDescriptor = @enumFromInt(0),
+        reg9: RegisterDescriptor = @enumFromInt(0),
+        reg10: RegisterDescriptor = @enumFromInt(0),
+        reg11: RegisterDescriptor = @enumFromInt(0),
+        reg12: RegisterDescriptor = @enumFromInt(0),
+        reg13: RegisterDescriptor = @enumFromInt(0),
+        reg14: RegisterDescriptor = @enumFromInt(0),
+        reg15: RegisterDescriptor = @enumFromInt(0),
+    };
+
+    /// Repeat count (GS primitive data size)
+    ///     PACKED mode NREG x NLOOP(qword)
+    ///     REGLIST mode NREG x NLOOP(dword)
+    ///     IMAGE mode NLOOP(qword)
+    NLOOP: u15,
+
+    /// Termination information (End Of Packet)
+    ///     0: With following primitive
+    ///     1: Without following primitive (End of GS packet)
+    EOP: bool,
+
+    _: u30 = 0,
+
+    /// Prim field enable
+    ///     0: Ignores PRIM field
+    ///     1: Outputs PRIM field value to PRIM register
+    PRE: bool,
+
+    /// Data to be set to the PRIM register of GS
+    PRIM: u11,
+
+    /// Data format
+    FLG: GifTagDataFormat,
+
+    /// Number of register descriptors in REGS field
+    NREG: u4,
+
+    REGS: RegisterDescriptors,
+
+    fn as_qword(self: GifTag) u128 {
+        return @bitCast(self);
+    }
+
+    fn init(options: GifTagOptions) GifTag {
+        const registers = RegisterDescriptors{
+            .reg0 = if (options.registers.len >= 0 + 1) options.registers[0] else @enumFromInt(0),
+            .reg1 = if (options.registers.len >= 1 + 1) options.registers[1] else @enumFromInt(0),
+            .reg2 = if (options.registers.len >= 2 + 1) options.registers[2] else @enumFromInt(0),
+            .reg3 = if (options.registers.len >= 3 + 1) options.registers[3] else @enumFromInt(0),
+            .reg4 = if (options.registers.len >= 4 + 1) options.registers[4] else @enumFromInt(0),
+            .reg5 = if (options.registers.len >= 5 + 1) options.registers[5] else @enumFromInt(0),
+            .reg6 = if (options.registers.len >= 6 + 1) options.registers[6] else @enumFromInt(0),
+            .reg7 = if (options.registers.len >= 7 + 1) options.registers[7] else @enumFromInt(0),
+            .reg8 = if (options.registers.len >= 8 + 1) options.registers[8] else @enumFromInt(0),
+            .reg9 = if (options.registers.len >= 9 + 1) options.registers[9] else @enumFromInt(0),
+            .reg10 = if (options.registers.len >= 10 + 1) options.registers[10] else @enumFromInt(0),
+            .reg11 = if (options.registers.len >= 11 + 1) options.registers[11] else @enumFromInt(0),
+            .reg12 = if (options.registers.len >= 12 + 1) options.registers[12] else @enumFromInt(0),
+            .reg13 = if (options.registers.len >= 13 + 1) options.registers[13] else @enumFromInt(0),
+            .reg14 = if (options.registers.len >= 14 + 1) options.registers[14] else @enumFromInt(0),
+            .reg15 = if (options.registers.len >= 15 + 1) options.registers[15] else @enumFromInt(0),
+        };
+
+        return GifTag{
+            .NLOOP = options.nloop,
+            .PRIM = if (options.prim) |x| x else 0,
+            .PRE = options.prim != null,
+            .EOP = options.end_of_packet,
+            .FLG = options.data_format,
+            .REGS = registers,
+            .NREG = @intCast(options.registers.len),
+        };
+    }
+};
 
 pub fn render(arg_frame: [*c]c.framebuffer_t, arg_z: [*c]c.zbuffer_t) !void {
-    var frame = arg_frame;
-    var z = arg_z;
-    var i: c_int = undefined;
-    _ = i;
-    var context: c_int = 0;
-    var local_world: c.MATRIX = undefined;
-    _ = local_world;
-    var world_view: c.MATRIX = undefined;
-    _ = world_view;
-    var view_screen: c.MATRIX = undefined;
-    var local_screen: c.MATRIX = undefined;
-    _ = local_screen;
-    var temp_vertices: [*c]c.VECTOR = undefined;
-    var prim: c.prim_t = undefined;
-    var color: c.color_t = undefined;
-    var verts: [*c]c.xyz_t = undefined;
-    var colors: [*c]c.color_t = undefined;
-    var packets: [2][*c]c.packet_t = undefined;
-    var current: [*c]c.packet_t = undefined;
-    var dmatag: [*c]c.qword_t = undefined;
-    packets[@as(c_uint, @intCast(@as(c_int, 0)))] = c.packet_init(@as(c_int, 100), @as(c_int, 0));
-    packets[@as(c_uint, @intCast(@as(c_int, 1)))] = c.packet_init(@as(c_int, 100), @as(c_int, 0));
-    temp_vertices = @as([*c]c.VECTOR, @ptrCast(@alignCast(c.memalign(@as(usize, @bitCast(@as(c_int, 128))), @sizeOf(c.VECTOR) *% @as(c_uint, @bitCast(vertex_count))))));
-    verts = @as([*c]c.xyz_t, @ptrCast(@alignCast(c.memalign(@as(usize, @bitCast(@as(c_int, 128))), @sizeOf(c.vertex_t) *% @as(c_uint, @bitCast(vertex_count))))));
-    colors = @as([*c]c.color_t, @ptrCast(@alignCast(c.memalign(@as(usize, @bitCast(@as(c_int, 128))), @sizeOf(c.color_t) *% @as(c_uint, @bitCast(vertex_count))))));
-    prim.type = 3;
-    prim.shading = 1;
-    prim.mapping = 0;
-    prim.fogging = 0;
-    prim.blending = 0;
-    prim.antialiasing = 1;
-    prim.mapping_type = 0;
-    prim.colorfix = 0;
-    color.unnamed_0.r = 128;
-    color.unnamed_0.g = 128;
-    color.unnamed_0.b = 128;
-    color.unnamed_0.a = 128;
-    color.unnamed_0.q = 1.0;
-    c.create_view_screen(@as([*c]f32, @ptrCast(@alignCast(&view_screen))), c.graph_aspect_ratio(), -3.0, 3.0, -3.0, 3.0, 1.0, 2000.0);
+    _ = arg_z;
+    _ = arg_frame;
     c.dma_wait_fast();
-    var t: i32 = 0;
     while (true) {
         input.update();
-        t += 1;
-        var q: [*c]c.qword_t = undefined;
-        current = packets[@as(c_uint, @intCast(context))];
-        dmatag = current.*.data;
-        q = dmatag;
-        q += 1;
-        q = c.draw_disable_tests(q, @as(c_int, 0), z);
 
-        var r: i32 = undefined;
-        var g: i32 = undefined;
-        const b: i32 = 0;
-        if (input.isPressed(0, .Cross)) {
-            r = 255;
-            g = 0;
-        } else {
-            r = 0;
-            g = 255;
-        }
-
-        q = c.draw_clear(q, @as(c_int, 0), 2048.0 - 320.0, 2048.0 - 256.0, @as(f32, @floatFromInt(frame.*.width)), @as(f32, @floatFromInt(frame.*.height)), r, g, b);
-        q = c.draw_enable_tests(q, @as(c_int, 0), z);
-
-        q = c.draw_finish(q);
-
-        _ = blk: {
-            _ = blk_1: {
-                dmatag.*.dw[@as(c_uint, @intCast(@as(c_int, 0)))] = (((((@as(u64, @bitCast(@as(c_longlong, (@divExact(@as(c_int, @bitCast(@intFromPtr(q) -% @intFromPtr(current.*.data))), @sizeOf(c.qword_t)) - @as(c_int, 1)) & @as(c_int, 65535)))) << @intCast(0)) | (@as(u64, @bitCast(@as(c_longlong, @as(c_int, 0) & @as(c_int, 3)))) << @intCast(26))) | (@as(u64, @bitCast(@as(c_longlong, @as(c_int, 7) & @as(c_int, 7)))) << @intCast(28))) | (@as(u64, @bitCast(@as(c_longlong, @as(c_int, 0) & @as(c_int, 1)))) << @intCast(31))) | (@as(u64, @bitCast(@as(c_longlong, @as(c_int, 0) & @as(c_int, 2147483647)))) << @intCast(32))) | (@as(u64, @bitCast(@as(c_longlong, @as(c_int, 0) & @as(c_int, 1)))) << @intCast(63));
-                break :blk_1 blk_2: {
-                    const tmp = @as(u32, @bitCast(@as(c_int, 0)));
-                    dmatag.*.sw[@as(c_uint, @intCast(@as(c_int, 2)))] = tmp;
-                    break :blk_2 tmp;
-                };
-            };
-            break :blk blk_1: {
-                const tmp = @as(u32, @bitCast(@as(c_int, 0)));
-                dmatag.*.sw[@as(c_uint, @intCast(@as(c_int, 3)))] = tmp;
-                break :blk_1 tmp;
-            };
-        };
         c.dma_wait_fast();
-        _ = c.dma_channel_send_chain(@as(c_int, 2), @as(?*anyopaque, @ptrCast(current.*.data)), @divExact(@as(c_int, @bitCast(@intFromPtr(q) -% @intFromPtr(current.*.data))), @sizeOf(c.qword_t)), @as(c_int, 0), @as(c_int, 0));
-        context ^= @as(c_int, 1);
+        // _ = c.dma_channel_send_chain(@as(c_int, 2), @as(?*anyopaque, @ptrCast(current.*.data)), @divExact(@as(c_int, @bitCast(@intFromPtr(q) -% @intFromPtr(current.*.data))), @sizeOf(c.qword_t)), @as(c_int, 0), @as(c_int, 0));
         c.draw_wait_finish();
         c.graph_wait_vsync();
     }
-    c.packet_free(packets[@as(c_uint, @intCast(@as(c_int, 0)))]);
-    c.packet_free(packets[@as(c_uint, @intCast(@as(c_int, 1)))]);
 }
 
 fn run() !void {
     // graphics initialization
-
     var frame: c.framebuffer_t = undefined;
     var z: c.zbuffer_t = undefined;
     _ = c.dma_channel_initialize(c.DMA_CHANNEL_GIF, @as(?*anyopaque, @ptrFromInt(@as(c_int, 0))), @as(c_int, 0));
@@ -519,9 +200,25 @@ fn run() !void {
 }
 
 pub export fn main() c_int {
-    run() catch |err| {
-        std.debug.print("Error: {s}\n", .{@errorName(err)});
-    };
+    const giftag = GifTag.init(.{
+        .nloop = 1,
+        .end_of_packet = false,
+        .data_format = .REGLIST,
+        .prim = null,
+        .registers = &[_]RegisterDescriptor{
+            .RGBAQ,
+            .XYZ2,
+            .RGBAQ,
+            .XYZ2,
+            .RGBAQ,
+            .XYZ2,
+        },
+    });
+    std.debug.print("{x:0>32}\n", .{giftag.as_qword()});
+
+    // run() catch |err| {
+    //     std.debug.print("Error: {s}\n", .{@errorName(err)});
+    // };
     _ = c.SleepThread();
     return 0;
 }

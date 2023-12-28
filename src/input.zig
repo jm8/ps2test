@@ -59,7 +59,7 @@ const Pad = struct {
         if (!self.connected) {
             return false;
         }
-        return (self.state.pad_button_status.btns & @intFromEnum(button)) != 0;
+        return (self.state.pad_button_status.btns & @intFromEnum(button)) == 0;
     }
 
     pub fn deinit(self: *const Pad) void {
