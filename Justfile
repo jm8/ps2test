@@ -1,7 +1,7 @@
 image_tag := "ps2sdk"
 zig_lib_dir := `zig env | jq -r .lib_dir`
-docker := "podman"
-pcsx2 := "pcsx2-qt"
+docker := "docker"
+pcsx2 := "/var/lib/flatpak/exports/bin/net.pcsx2.PCSX2"
 bios := "~/.config/PCSX2/bios/SCPH-70012.bin"
 zigflags := "-target mipsel-freestanding-gnu -Iinclude -lc -fsingle-threaded -O Debug"
 dockerrun := docker + " run --net=host -v$PWD:/mnt -it " + image_tag
